@@ -46,11 +46,15 @@ public class PagedList<T> : List<T>
     private static int NormalizePage(int page, int totalPages)
     {
         if (page < 1)
+        {
             return 1;
-
+        }
+            
         if (totalPages > 0 && page > totalPages)
+        {
             return totalPages;
-
+        }
+            
         return page;
     }
 }

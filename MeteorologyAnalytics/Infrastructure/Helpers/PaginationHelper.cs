@@ -12,17 +12,23 @@ public static class PaginationHelper
         where T : class
     {
         if (pageNumber < 1)
+        {
             pageNumber = 1;
+        }
+            
 
         if (pageSize < 1)
+        {
             pageSize = 10;
+        }  
 
         var totalCount = await source.CountAsync();
-
         var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
         if (pageNumber > totalPages && totalPages > 0)
+        {
             pageNumber = totalPages;
+        }
 
         var items = await source
             .Skip((pageNumber - 1) * pageSize)

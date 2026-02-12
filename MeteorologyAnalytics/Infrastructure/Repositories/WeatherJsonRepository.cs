@@ -1,7 +1,8 @@
-using System.Text.Json;
-using MeteorologyAnalytics.Domain;
+﻿using MeteorologyAnalytics.Domain;
 using MeteorologyAnalytics.Domain.Interfaces;
 using MeteorologyAnalytics.Domain.Pagination;
+using MeteorologyAnalytics.Infrastructure.Helpers;
+using System.Text.Json;
 
 namespace MeteorologyAnalytics.Infrastructure.Repositories;
 
@@ -28,11 +29,13 @@ public class WeatherJsonRepository : IWeatherRepository
             "weather.json");
 
         if (!File.Exists(filePath))
+        {
             return new PagedList<Weather>(
-                new List<Weather>(),
-                0,
-                pageNumber,
-                pageSize);
+             new List<Weather>(),
+             0,
+             pageNumber,
+             pageSize);
+        }   
 
         var json = await File.ReadAllTextAsync(filePath);
 
@@ -47,6 +50,11 @@ public class WeatherJsonRepository : IWeatherRepository
             .ToList();
         Console.WriteLine($"PageSize recebido: {pageSize}");
 
-        return new PagedList<Weather>(items, count, pageNumber, pageSize);
+        return new PagedList<Weather>(
+             items,
+             pageNumber, // currentPage ✅
+             pageSize,   // pageSize ✅
+             count       // totalCount ✅
+         );
     }
 }
