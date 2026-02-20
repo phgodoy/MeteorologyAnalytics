@@ -20,9 +20,11 @@ public class WeatherService : IWeatherService
 
         var mapped = data.Select(x => new WeatherResponseDto
         {
+            Id = x.Id,
             Date = x.Date,
             TemperatureC = x.TemperatureC,
-            Summary = x.Summary
+            Summary = x.Summary,
+            TemperatureF = x.TemperatureF
         }).ToList();
 
         return new PagedList<WeatherResponseDto>(
