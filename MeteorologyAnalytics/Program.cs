@@ -1,24 +1,46 @@
 using MeteorologyAnalytics.Application.Interfaces;
 using MeteorologyAnalytics.Application.Services;
 using MeteorologyAnalytics.Domain.Interfaces;
+using MeteorologyAnalytics.Infrastructure.Persistence;
 using MeteorologyAnalytics.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ Adicionar suporte a Controllers
+// Controllers
 builder.Services.AddControllers();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 👉 (DI - quando você já tiver criado)
-builder.Services.AddScoped<IWeatherRepository, WeatherJsonRepository>();
+
+// -----------------------------
+// DATABASE
+// -----------------------------
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
+
+
+// -----------------------------
+// DEPENDENCY INJECTION
+// -----------------------------
+
+// Repository do banco
+builder.Services.AddScoped<IWeatherRepository, WeatherRepository>();
+// Service
 builder.Services.AddScoped<IWeatherService, WeatherService>();
+
 
 var app = builder.Build();
 
-// Pipeline
+
+// -----------------------------
+// PIPELINE
+// -----------------------------
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -27,7 +49,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// ✅ Mapear controllers (ESSENCIAL)
 app.MapControllers();
 
 app.Run();
