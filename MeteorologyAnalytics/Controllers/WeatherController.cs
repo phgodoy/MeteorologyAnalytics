@@ -14,7 +14,7 @@ public class WeatherController : ControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("offset")]
     public async Task<IActionResult> Get([FromQuery]PaginationParams paginationParams)
     {
         var result = await _service.GetAllAsync
@@ -28,6 +28,21 @@ public class WeatherController : ControllerBase
                 result.TotalCount
             ));
         
+        return Ok(result);
+    }
+    
+    [HttpGet("keyset")]
+    public async Task<IActionResult> GetKeyset([FromQuery] KeysetParams param)
+    {
+        var result = await _service.GetByCursorAsync(param.LastId, param.PageSize);
+
+        Response.AddPaginationHeader(
+            new CursorPaginationHeader(
+                result.NextCursor,
+                result.HasMore
+            )
+        );
+
         return Ok(result);
     }
 }

@@ -20,9 +20,11 @@ public class WeatherService : IWeatherService
 
         var mapped = data.Select(x => new WeatherResponseDto
         {
+            Id = x.Id,
             Date = x.Date,
             TemperatureC = x.TemperatureC,
-            Summary = x.Summary
+            Summary = x.Summary,
+            TemperatureF = x.TemperatureF
         }).ToList();
 
         return new PagedList<WeatherResponseDto>(
@@ -32,6 +34,30 @@ public class WeatherService : IWeatherService
             data.TotalCount,
             data.TotalPages
         );
+    }
+    
+    public async Task<CursorPage<WeatherResponseDto>> GetByCursorAsync(int? cursor, int pageSize)
+    {
+        var data = await _repository.GetByKeysetAsync(cursor, pageSize);
+
+        var mapped = data.Data
+            .Select(x => new WeatherResponseDto
+            {
+                Id = x.Id,
+                Date = x.Date,
+                TemperatureC = x.TemperatureC,
+                Summary = x.Summary,
+                TemperatureF = x.TemperatureF
+            })
+            .ToList();
+
+        return new CursorPage<WeatherResponseDto>
+        {
+            Data = mapped,
+            NextCursor = data.NextCursor,
+            HasMore = data.HasMore
+            
+        };
     }
 
 }
