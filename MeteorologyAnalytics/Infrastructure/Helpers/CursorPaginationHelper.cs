@@ -37,6 +37,7 @@ public static class CursorPaginationHelper
 
         return new CursorPage<T>
         {
+            Data = items,
             NextCursor = nextCursor,
             HasMore = hasMore
         };
