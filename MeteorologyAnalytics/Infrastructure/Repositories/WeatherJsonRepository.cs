@@ -57,4 +57,9 @@ public class WeatherJsonRepository : IWeatherRepository
              count       // totalCount ✅
          );
     }
+
+    public Task<CursorPage<Weather>> GetByKeysetAsync(int? cursor, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -30,4 +30,19 @@ public class WeatherController : ControllerBase
         
         return Ok(result);
     }
+    
+    [HttpGet("keyset")]
+    public async Task<IActionResult> GetKeyset([FromQuery] KeysetParams param)
+    {
+        var result = await _service.GetByCursorAsync(param.LastId, param.PageSize);
+
+        Response.AddPaginationHeader(
+            new CursorPaginationHeader(
+                result.NextCursor,
+                result.HasMore
+            )
+        );
+
+        return Ok(result);
+    }
 }
