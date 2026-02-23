@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MeteorologyAnalytics")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1a6f60c031c106d0cccb8622d4be710c93164345")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2b0356f3cea84e11e56a56638325fc1a5ff7b32c")]
 [assembly: System.Reflection.AssemblyProductAttribute("MeteorologyAnalytics")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MeteorologyAnalytics")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

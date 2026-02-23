@@ -36,5 +36,32 @@ public class WeatherRepository : IWeatherRepository
             totalCount,
             totalPages
         );
+    } 
+    
+   
+    public async Task<CursorPage<Weather>> GetByKeysetAsync(int? cursor, int pageSize)
+    {
+        var query = _context.Weather
+            .OrderBy(x => x.Id)
+            .AsQueryable();
+
+        if (cursor.HasValue)
+            query = query.Where(x => x.Id > cursor.Value);
+
+        var items = await query
+            .Take(pageSize + 1)
+            .ToListAsync();
+
+        var hasMore = items.Count > pageSize;
+
+        if (hasMore)
+            items.RemoveAt(items.Count - 1);
+
+        return new CursorPage<Weather>
+        {
+            Data = items,
+            NextCursor = items.LastOrDefault()?.Id,
+            HasMore = hasMore
+        };
     }
 }

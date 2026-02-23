@@ -1,25 +1,26 @@
 using System.Text.Json;
-using MeteorologyAnalytics.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace MeteorologyAnalytics.Extensions;
 
 public static class HttpExtensions
 {
-    public static void AddPaginationHeader(
+    public static void AddPaginationHeader<T>(
         this HttpResponse response,
-        PaginationHeader header)
+        T header)
     {
         var jsonOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        response.Headers.Add(
-            "Pagination",
-            JsonSerializer.Serialize(header, jsonOptions));
+        var json = JsonSerializer.Serialize(header, jsonOptions);
 
-        response.Headers.Add(
-            "Access-Control-Expose-Headers",
-            "Pagination");
+        response.Headers["Pagination"] = json;
+
+        if (!response.Headers.ContainsKey("Access-Control-Expose-Headers"))
+        {
+            response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
+        }
     }
 }
