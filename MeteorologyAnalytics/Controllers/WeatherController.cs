@@ -14,7 +14,7 @@ public class WeatherController : ControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("offset")]
     public async Task<IActionResult> Get([FromQuery]PaginationParams paginationParams)
     {
         var result = await _service.GetAllAsync
