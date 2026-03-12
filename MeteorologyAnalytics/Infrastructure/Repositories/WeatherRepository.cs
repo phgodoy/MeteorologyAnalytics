@@ -1,4 +1,5 @@
 using MeteorologyAnalytics.Domain;
+using MeteorologyAnalytics.Domain.Filters;
 using MeteorologyAnalytics.Domain.Interfaces;
 using MeteorologyAnalytics.Domain.Pagination;
 using MeteorologyAnalytics.Infrastructure.Helpers;
@@ -39,5 +40,23 @@ public class WeatherRepository : IWeatherRepository
             x => x.Id,
             cursor
         );
+    }
+    
+    public async Task<PagedList<Weather>> GetByFilterAsync(
+        int pageNumber,
+        int pageSize,
+        WeatherStationFilter? filter)
+    {
+        var query = _context.Weather.AsQueryable();
+
+        if (filter != null)
+        {
+            query = filter.Apply(query);
+        }
+        
+        return await PaginationHelper.CreateAsync(
+            query,
+            pageNumber,
+            pageSize);
     }
 }
