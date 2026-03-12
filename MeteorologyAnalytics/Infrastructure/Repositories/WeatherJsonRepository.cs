@@ -3,6 +3,7 @@ using MeteorologyAnalytics.Domain.Interfaces;
 using MeteorologyAnalytics.Domain.Pagination;
 using MeteorologyAnalytics.Infrastructure.Helpers;
 using System.Text.Json;
+using MeteorologyAnalytics.Domain.Filters;
 
 namespace MeteorologyAnalytics.Infrastructure.Repositories;
 
@@ -59,6 +60,11 @@ public class WeatherJsonRepository : IWeatherRepository
     }
 
     public Task<CursorPage<Weather>> GetByKeysetAsync(int? cursor, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<PagedList<Weather>> GetByFilterAsync(int pageNumber, int pageSize, WeatherStationFilter? filter)
     {
         throw new NotImplementedException();
     }

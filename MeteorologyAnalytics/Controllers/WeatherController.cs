@@ -1,4 +1,5 @@
 using MeteorologyAnalytics.Application.Interfaces;
+using MeteorologyAnalytics.Domain.Filters;
 using MeteorologyAnalytics.Extensions;
 using MeteorologyAnalytics.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +41,28 @@ public class WeatherController : ControllerBase
             new CursorPaginationHeader(
                 result.NextCursor,
                 result.HasMore
+            )
+        );
+
+        return Ok(result);
+    }
+    
+    [HttpGet("filter")]
+    public async Task<IActionResult> GetByFilter(
+        [FromQuery] WeatherStationFilter filter)
+    {
+        var result = await _service.GetByFilterAsync(
+            filter.PageNumber,
+            filter.PageSize,
+            filter
+        );
+
+        Response.AddPaginationHeader(
+            new PaginationHeader(
+                result.CurrentPage,
+                result.PageSize,
+                result.TotalCount,
+                result.TotalPages
             )
         );
 

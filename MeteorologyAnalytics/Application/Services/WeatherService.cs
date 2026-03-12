@@ -1,5 +1,6 @@
 using MeteorologyAnalytics.Application.DTO.Response;
 using MeteorologyAnalytics.Application.Interfaces;
+using MeteorologyAnalytics.Domain.Filters;
 using MeteorologyAnalytics.Domain.Interfaces;
 using MeteorologyAnalytics.Domain.Pagination;
 
@@ -56,8 +57,34 @@ public class WeatherService : IWeatherService
             Data = mapped,
             NextCursor = data.NextCursor,
             HasMore = data.HasMore
-            
         };
+    }
+
+    public async Task<PagedList<WeatherResponseDto>> GetByFilterAsync(
+        int pageNumber,
+        int pageSize,
+        WeatherStationFilter? filter)
+    {
+        var data = await _repository.GetByFilterAsync(pageNumber, pageSize, filter);
+
+        var mapped = data
+            .Select(x => new WeatherResponseDto
+            {
+                Id = x.Id,
+                Date = x.Date,
+                TemperatureC = x.TemperatureC,
+                Summary = x.Summary,
+                TemperatureF = x.TemperatureF
+            })
+            .ToList();
+
+        return new PagedList<WeatherResponseDto>(
+            mapped,
+            data.CurrentPage,
+            data.PageSize,
+            data.TotalCount,
+            data.TotalPages
+        );
     }
 
 }
